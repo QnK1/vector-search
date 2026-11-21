@@ -1,0 +1,10 @@
+build/
+.vs/
+.vscode/
+*.bin
+*.idx
+*.user
+CMakeUserPresets.json
+
+data.csv
+index.bin
