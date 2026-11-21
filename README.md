@@ -1,6 +1,6 @@
 # vsearch
 
-Small in-memory ANN (Approximate Nearest Neighbor) vector search engine using an Inverted File (IVF) index and memory-mapped files.
+Small in-memory ANN (Approximate Nearest Neighbor) vector search engine using an Inverted File index and memory-mapped files.
 
 It follows a write-once, read-many workflow:
 1. `build` clusters input vectors from a CSV file with k-means and writes a flat binary index to disk.
