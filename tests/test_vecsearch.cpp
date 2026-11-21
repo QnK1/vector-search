@@ -2,13 +2,14 @@
 #include "ivf_index.hpp"
 #include "kmeans.hpp"
 #include "metrics.hpp"
+#include <array>
 #include <filesystem>
 #include <gtest/gtest.h>
 
 TEST(MetricsTest, L2AndCosineBasic) {
-    const float a[] = {1.0f, 0.0f, 0.0f};
-    const float b[] = {0.0f, 1.0f, 0.0f};
-    const float c[] = {2.0f, 0.0f, 0.0f};
+    const std::array<float, 3> a = {1.0f, 0.0f, 0.0f};
+    const std::array<float, 3> b = {0.0f, 1.0f, 0.0f};
+    const std::array<float, 3> c = {2.0f, 0.0f, 0.0f};
 
     vs::L2Metric l2;
     vs::CosineMetric cosine;
@@ -71,7 +72,7 @@ TEST(IvfIndexTest, HandlesInvalidDimensionAndMissingFile) {
         auto mapped = vs::MappedIvfIndex::open(idx_path);
         ASSERT_TRUE(mapped.has_value());
 
-        const float bad_query[] = {1.0f, 2.0f};
+        const std::array<float, 2> bad_query = {1.0f, 2.0f};
         auto res = mapped->search(bad_query, 3, 1, vs::L2Metric{});
         EXPECT_FALSE(res.has_value());
     }

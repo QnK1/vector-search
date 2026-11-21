@@ -13,7 +13,7 @@
 namespace {
 
 std::expected<std::vector<float>, std::string> parse_vector(std::string s) {
-    std::replace(s.begin(), s.end(), ',', ' ');
+    std::ranges::replace(s, ',', ' ');
     std::istringstream iss(s);
     std::vector<float> vec;
     float v = 0.0f;

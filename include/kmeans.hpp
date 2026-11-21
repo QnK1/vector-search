@@ -34,12 +34,11 @@ KMeansResult fit_kmeans(const Dataset &ds, std::uint32_t k, std::uint32_t max_it
         indices[i] = i;
     }
     std::mt19937 rng(42);
-    std::shuffle(indices.begin(), indices.end(), rng);
+    std::ranges::shuffle(indices, rng);
 
     for (std::uint32_t c = 0; c < k; ++c) {
         auto src = ds.row(indices[c]);
-        std::copy(src.begin(), src.end(),
-                  res.centroids.begin() + static_cast<std::size_t>(c) * ds.dim);
+        std::ranges::copy(src, res.centroids.begin() + static_cast<std::size_t>(c) * ds.dim);
     }
 
     std::vector<float> new_centroids(res.centroids.size(), 0.0f);
@@ -75,8 +74,8 @@ KMeansResult fit_kmeans(const Dataset &ds, std::uint32_t k, std::uint32_t max_it
         }
 
         // Recompute centroids
-        std::fill(new_centroids.begin(), new_centroids.end(), 0.0f);
-        std::fill(counts.begin(), counts.end(), 0);
+        std::ranges::fill(new_centroids, 0.0f);
+        std::ranges::fill(counts, 0);
 
         for (std::uint32_t i = 0; i < ds.count; ++i) {
             std::uint32_t c = res.assignments[i];

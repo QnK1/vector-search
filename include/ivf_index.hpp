@@ -83,8 +83,8 @@ class MappedIvfIndex {
         for (std::uint32_t c = 0; c < header_->num_clusters; ++c) {
             cluster_dists[c] = {c, metric(query, centroid(c))};
         }
-        std::partial_sort(
-            cluster_dists.begin(), cluster_dists.begin() + nprobe, cluster_dists.end(),
+        std::ranges::partial_sort(
+            cluster_dists, cluster_dists.begin() + nprobe,
             [](const SearchResult &a, const SearchResult &b) { return a.distance < b.distance; });
 
         // Scan inverted lists of selected clusters
@@ -100,8 +100,8 @@ class MappedIvfIndex {
 
         // Keep top_k results
         std::size_t k = std::min<std::size_t>(top_k, candidates.size());
-        std::partial_sort(
-            candidates.begin(), candidates.begin() + k, candidates.end(),
+        std::ranges::partial_sort(
+            candidates, candidates.begin() + static_cast<std::ptrdiff_t>(k),
             [](const SearchResult &a, const SearchResult &b) { return a.distance < b.distance; });
         candidates.resize(k);
         return candidates;

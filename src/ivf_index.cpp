@@ -45,7 +45,7 @@ std::expected<void, std::string> build_ivf_index(const Dataset &ds,
         current_offset += metas[c].count;
     }
 
-    std::ofstream out(index_path, std::ios::binary | std::ios::trunc);
+    std::ofstream out(index_path, std::ios::binary);
     if (!out) {
         return std::unexpected("Cannot create index file: " + index_path.string());
     }
@@ -58,12 +58,13 @@ std::expected<void, std::string> build_ivf_index(const Dataset &ds,
 
     out.write(reinterpret_cast<const char *>(&header), sizeof(IndexHeader));
     out.write(reinterpret_cast<const char *>(km.centroids.data()),
-              km.centroids.size() * sizeof(float));
-    out.write(reinterpret_cast<const char *>(metas.data()), metas.size() * sizeof(ListMeta));
+              static_cast<std::streamsize>(km.centroids.size() * sizeof(float)));
+    out.write(reinterpret_cast<const char *>(metas.data()),
+              static_cast<std::streamsize>(metas.size() * sizeof(ListMeta)));
     out.write(reinterpret_cast<const char *>(flat_ids.data()),
-              flat_ids.size() * sizeof(std::uint32_t));
+              static_cast<std::streamsize>(flat_ids.size() * sizeof(std::uint32_t)));
     out.write(reinterpret_cast<const char *>(flat_vectors.data()),
-              flat_vectors.size() * sizeof(float));
+              static_cast<std::streamsize>(flat_vectors.size() * sizeof(float)));
 
     if (!out) {
         return std::unexpected("Failed to write index file");

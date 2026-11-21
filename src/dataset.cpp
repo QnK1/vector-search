@@ -22,7 +22,7 @@ std::expected<Dataset, std::string> load_csv(const std::filesystem::path &path) 
             continue;
         }
 
-        std::replace(line.begin(), line.end(), ',', ' ');
+        std::ranges::replace(line, ',', ' ');
         std::istringstream iss(line);
 
         std::vector<float> row;
@@ -61,8 +61,9 @@ std::expected<void, std::string> save_csv(const std::filesystem::path &path, con
     for (std::uint32_t i = 0; i < ds.count; ++i) {
         auto r = ds.row(i);
         for (std::uint32_t d = 0; d < ds.dim; ++d) {
-            if (d > 0)
+            if (d > 0) {
                 out << ',';
+            }
             out << r[d];
         }
         out << '\n';

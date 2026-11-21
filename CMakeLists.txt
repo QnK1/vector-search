@@ -72,3 +72,30 @@ endif()
 
 include(GoogleTest)
 gtest_discover_tests(vsearch_tests)
+
+file(GLOB_RECURSE ALL_HEADERS "${CMAKE_SOURCE_DIR}/include/*.hpp")
+file(GLOB_RECURSE ALL_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp" "${CMAKE_SOURCE_DIR}/tests/*.cpp")
+
+find_program(CLANG_FORMAT_EXE clang-format)
+if(CLANG_FORMAT_EXE)
+    add_custom_target(format
+        COMMAND ${CLANG_FORMAT_EXE} -i ${ALL_HEADERS} ${ALL_SOURCES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Running clang-format"
+    )
+endif()
+
+find_program(CLANG_TIDY_EXE clang-tidy)
+if(CLANG_TIDY_EXE)
+    set(TIDY_INCLUDES -I${CMAKE_SOURCE_DIR}/include -I${cli11_SOURCE_DIR}/include -I${googletest_SOURCE_DIR}/googletest/include)
+    foreach(lib ${BOOST_LIBS})
+        list(APPEND TIDY_INCLUDES -isystem ${boost_${lib}_SOURCE_DIR}/include)
+    endforeach()
+
+    add_custom_target(lint
+        COMMAND ${CLANG_TIDY_EXE} --quiet "-header-filter=${CMAKE_SOURCE_DIR}/include/.*" ${ALL_SOURCES} -- -std=c++23 ${TIDY_INCLUDES}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Running clang-tidy"
+    )
+endif()
+
