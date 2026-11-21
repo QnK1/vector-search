@@ -17,7 +17,8 @@ struct KMeansResult {
 };
 
 template <DistanceMetric Metric = L2Metric>
-KMeansResult fit_kmeans(const Dataset& ds, std::uint32_t k, std::uint32_t max_iters = 25, Metric metric = {}) {
+KMeansResult fit_kmeans(const Dataset &ds, std::uint32_t k, std::uint32_t max_iters = 25,
+                        Metric metric = {}) {
     KMeansResult res;
     if (ds.count == 0 || ds.dim == 0 || k == 0) {
         return res;
@@ -37,7 +38,8 @@ KMeansResult fit_kmeans(const Dataset& ds, std::uint32_t k, std::uint32_t max_it
 
     for (std::uint32_t c = 0; c < k; ++c) {
         auto src = ds.row(indices[c]);
-        std::copy(src.begin(), src.end(), res.centroids.begin() + static_cast<std::size_t>(c) * ds.dim);
+        std::copy(src.begin(), src.end(),
+                  res.centroids.begin() + static_cast<std::size_t>(c) * ds.dim);
     }
 
     std::vector<float> new_centroids(res.centroids.size(), 0.0f);
@@ -53,7 +55,8 @@ KMeansResult fit_kmeans(const Dataset& ds, std::uint32_t k, std::uint32_t max_it
             std::uint32_t best_c = 0;
 
             for (std::uint32_t c = 0; c < k; ++c) {
-                std::span<const float> cent(res.centroids.data() + static_cast<std::size_t>(c) * ds.dim, ds.dim);
+                std::span<const float> cent(
+                    res.centroids.data() + static_cast<std::size_t>(c) * ds.dim, ds.dim);
                 float d = metric(vec, cent);
                 if (d < best_dist) {
                     best_dist = d;
@@ -79,16 +82,16 @@ KMeansResult fit_kmeans(const Dataset& ds, std::uint32_t k, std::uint32_t max_it
             std::uint32_t c = res.assignments[i];
             counts[c]++;
             auto vec = ds.row(i);
-            float* dst = new_centroids.data() + static_cast<std::size_t>(c) * ds.dim;
+            float *dst = new_centroids.data() + static_cast<std::size_t>(c) * ds.dim;
             for (std::uint32_t d = 0; d < ds.dim; ++d) {
                 dst[d] += vec[d];
             }
         }
 
         for (std::uint32_t c = 0; c < k; ++c) {
-            float* dst = res.centroids.data() + static_cast<std::size_t>(c) * ds.dim;
+            float *dst = res.centroids.data() + static_cast<std::size_t>(c) * ds.dim;
             if (counts[c] > 0) {
-                const float* src = new_centroids.data() + static_cast<std::size_t>(c) * ds.dim;
+                const float *src = new_centroids.data() + static_cast<std::size_t>(c) * ds.dim;
                 float inv = 1.0f / static_cast<float>(counts[c]);
                 for (std::uint32_t d = 0; d < ds.dim; ++d) {
                     dst[d] = src[d] * inv;

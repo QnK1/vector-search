@@ -6,7 +6,7 @@
 
 namespace vs {
 
-std::expected<Dataset, std::string> load_csv(const std::filesystem::path& path) {
+std::expected<Dataset, std::string> load_csv(const std::filesystem::path &path) {
     std::ifstream in(path);
     if (!in) {
         return std::unexpected("Cannot open file: " + path.string());
@@ -52,7 +52,7 @@ std::expected<Dataset, std::string> load_csv(const std::filesystem::path& path) 
     return ds;
 }
 
-std::expected<void, std::string> save_csv(const std::filesystem::path& path, const Dataset& ds) {
+std::expected<void, std::string> save_csv(const std::filesystem::path &path, const Dataset &ds) {
     std::ofstream out(path);
     if (!out) {
         return std::unexpected("Cannot write file: " + path.string());
@@ -61,7 +61,8 @@ std::expected<void, std::string> save_csv(const std::filesystem::path& path, con
     for (std::uint32_t i = 0; i < ds.count; ++i) {
         auto r = ds.row(i);
         for (std::uint32_t d = 0; d < ds.dim; ++d) {
-            if (d > 0) out << ',';
+            if (d > 0)
+                out << ',';
             out << r[d];
         }
         out << '\n';
@@ -69,7 +70,8 @@ std::expected<void, std::string> save_csv(const std::filesystem::path& path, con
     return {};
 }
 
-Dataset generate_synthetic(std::uint32_t count, std::uint32_t dim, std::uint32_t clusters, std::uint32_t seed) {
+Dataset generate_synthetic(std::uint32_t count, std::uint32_t dim, std::uint32_t clusters,
+                           std::uint32_t seed) {
     Dataset ds;
     ds.count = count;
     ds.dim = dim;
@@ -85,7 +87,7 @@ Dataset generate_synthetic(std::uint32_t count, std::uint32_t dim, std::uint32_t
     std::normal_distribution<float> noise_dist(0.0f, 1.5f);
 
     std::vector<float> centers(static_cast<std::size_t>(clusters) * dim);
-    for (float& v : centers) {
+    for (float &v : centers) {
         v = center_dist(rng);
     }
 

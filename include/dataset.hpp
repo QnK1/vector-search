@@ -19,8 +19,9 @@ struct Dataset {
     }
 };
 
-std::expected<Dataset, std::string> load_csv(const std::filesystem::path& path);
-std::expected<void, std::string> save_csv(const std::filesystem::path& path, const Dataset& ds);
-Dataset generate_synthetic(std::uint32_t count, std::uint32_t dim, std::uint32_t clusters, std::uint32_t seed = 42);
+std::expected<Dataset, std::string> load_csv(const std::filesystem::path &path);
+std::expected<void, std::string> save_csv(const std::filesystem::path &path, const Dataset &ds);
+Dataset generate_synthetic(std::uint32_t count, std::uint32_t dim, std::uint32_t clusters,
+                           std::uint32_t seed = 42);
 
 } // namespace vs

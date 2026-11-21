@@ -2,8 +2,8 @@
 #include "ivf_index.hpp"
 #include "kmeans.hpp"
 #include "metrics.hpp"
-#include <gtest/gtest.h>
 #include <filesystem>
+#include <gtest/gtest.h>
 
 TEST(MetricsTest, L2AndCosineBasic) {
     const float a[] = {1.0f, 0.0f, 0.0f};
