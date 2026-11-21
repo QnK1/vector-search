@@ -45,4 +45,4 @@ Run `./build/Release/vsearch.exe --help` (or `<subcommand> --help`) for all opti
 
 ## Note on AI usage
 
-AI tools were used to help withparts of the code, CMake setup, layout boilerplate, and unit tests.
+AI tools were used to help with parts of the code, CMake setup, layout boilerplate, and unit tests.
